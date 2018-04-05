@@ -4,7 +4,8 @@ from character import *
 from rooms import *
 from merchants import *
 
-## Another test
+## I'm testing to see if this affects just the local branch and not master, as
+## should
 
 
 #####  FUNCTION FOR CLEARING THE SCREEN  #####
@@ -12,7 +13,7 @@ def cls():
 
     os.system("cls" if os.name == "nt" else "clear")
 
-
+variable= "I'm adding a random string variable for git testing"
 
 #####   SET INITIAL CONDITIONS  #####
 
