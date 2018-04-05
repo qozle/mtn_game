@@ -4,7 +4,7 @@ from character import *
 from rooms import *
 from merchants import *
 
-
+## Another test
 
 
 #####  FUNCTION FOR CLEARING THE SCREEN  #####
@@ -57,7 +57,7 @@ Aweessooommmee!  You collected all the different items from the merchants!!
 You win!!  There's not much more to do, but you can keep walking around!
 
 Go ahead, do a victory lap!""")
-        
+
 
     ## Takes the player's input, fills in the format with the return from
     ## avail_moves (see avail_moves() under rooms), sets the return from
@@ -91,12 +91,12 @@ Go ahead, do a victory lap!""")
     ## the player's pos to be on a door or merch, I need to check somewhere
     ## other than avail_moves that they are actually there.
     if info == 'back':
-        
+
         ## Reset the room to the one they came in from, set player_loc to the
         ## door they left out of
         room = room.room_list[room.old_room]
         room.player_loc = room.door_used
-        
+
     ## If they're standing on a door (again, not really...)
     if info == 'door':
 
@@ -126,19 +126,19 @@ Go ahead, do a victory lap!""")
             room.player_gb = room.player_loc
             room.merchant_loc = room.get_location()
             merchant_dict[room.room_num] = Merchant()
-            
-            
-        ## Curently broken.  
+
+
+        ## Curently broken.
     if info == 'forward':
 
         room = room.room_list[(room.room_num + 1)]
         room.player_loc = room.player_ll
-        
+
         ## If they're standing on a merchant, set the current merchant to the
         ## one assigned to the current room, and then run it's activation method
         ## see activate(self) under merchants
     if info == 'merchant':
-        merchant = merchant_dict[room.room_num]   
+        merchant = merchant_dict[room.room_num]
         item = merchant.activate(toon.inventory)
 
         ## Also currently broken.  This is some bullshit to sort out the return
@@ -153,7 +153,7 @@ Go ahead, do a victory lap!""")
 
                 item = 'back'
                 continue
-            
+
             if item == 'back':
                 break
 
@@ -167,9 +167,9 @@ Go ahead, do a victory lap!""")
     if info == 'cheat':
         toon.inventory += invis_merchant.inventory_list
 
-    ## TIME TO GTFO oops caps            
+    ## TIME TO GTFO oops caps
     if info == 'quit':
         break
-        
-    
+
+
     cls()
