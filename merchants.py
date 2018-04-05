@@ -48,8 +48,8 @@ interested in, care to see what I have? [Buy], [Sell], or [Back]""")
                         self.inventory.remove(item)
                 break
                 return item
-                        
-                                
+
+
             if info =='sell':
                 print('\n')
                 print("Here's what you have to sell!:")
@@ -62,8 +62,8 @@ interested in, care to see what I have? [Buy], [Sell], or [Back]""")
                     if info.lower() == item.lower():
                         player_inv.remove(item)
                 break
-                sreturn player_inv
-                        
+                return player_inv
+
 
             if info == 'back':
                 break
@@ -73,11 +73,3 @@ interested in, care to see what I have? [Buy], [Sell], or [Back]""")
 
                 info = input("""Sorry, I don't understand.  Try again- do you
 want to [Buy], [Sell], or go [Back]? >""")
-                
-                
-
-
-
-
-
-                
