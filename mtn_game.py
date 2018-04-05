@@ -13,7 +13,7 @@ def cls():
 
     os.system("cls" if os.name == "nt" else "clear")
 
-
+variable= "I'm adding a random string variable for git testing"
 
 #####   SET INITIAL CONDITIONS  #####
 
