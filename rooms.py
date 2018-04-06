@@ -5,7 +5,7 @@ import random
 class Room:
 
     ##### DEFINE INITALIZE CONDITIONS #####
-    def __init__(self, room_num=0, room_label="a", exits_used = {}, room_list = {}, gb=[], last_room=[], **kwargs):
+    def __init__(self, room_num=0, room_label="a",room_idt="0", room_list = {}, last_room="", **kwargs):
 
         
         self.cells = [] # map cells, list of tuples (coords)
@@ -15,12 +15,11 @@ class Room:
         self.merchant_loc = []
         self.exits = {} # list to contain the border cells of the map
         self.room_num = room_num # room's identity holder
-        self.player_ll = [] # to hold player's last location in the room
         self.room_label = room_label
+        self.room_idt = room_idt
         self.room_list = room_list # to hold entire list of all rooms, bug but ty
-        self.gb = gb
-        self.exits_used = exits_used
         self.last_room = last_room
+        
         
         self.length = random.randrange(1, 11) # get a random length
         self.width = random.randrange(1, 11) # get a random width
@@ -77,23 +76,13 @@ class Room:
             
 
     #####  FUNCTION FOR MAKING NEW ROOM  #####  This makes a new room and sends over any of the old rooms data.
-    def new_room(self):
+    def new_room(self, room_info):
 
-        self.player_ll = self.player_loc
-        lroom = self
-        
-        for item in self.exits:
-            if self.player_loc == self.exits[item]:
-                self.exits_used[item] = ""
-                self.door_taken = item
+        room_num, room_label, room_idt, room_list, last_room = room_info
 
-        self.room_idt = str(self.room_num + 1) + self.room_label 
-        self.room_list[self.room_idt] = self
         
-        newroom = Room(room_num = self.room_num + 1, room_label = self.door_taken, room_list = self.room_list,
-                       last_room=lroom)
+        newroom = Room(room_num, room_label, room_idt, room_list, last_room)
         newroom.player_loc = newroom.exits['a']
-        newroom.gb = newroom.exits['a']
         newroom.merchant_loc = newroom.get_location()
 
         return newroom
@@ -101,9 +90,10 @@ class Room:
     #####  FUNCTION FOR GOING BACK  #####
     def go_back(self):
 
-        self.player_ll = self.player_ll
+        self.room_list[self.room_idt] = self
         oldroom = self.last_room
-        oldroom.exits_used[self.room_label] = self
+        oldroom.room_list = self.room_list
+        
 
         return oldroom
 
@@ -129,11 +119,7 @@ class Room:
 
         x, y = self.player_loc
         self.moves = ['Up', 'Down', 'Left', 'Right']
-        for item in self.exits_used:
-            if self.player_loc == self.exits_used[item]:
-                self.moves.append('Forward')
-        if self.player_loc == self.player_ll:
-            self.moves.append('Forward')
+        
         if x == self.length:
             self.moves.remove('Down')
         if x == 0:
@@ -144,7 +130,10 @@ class Room:
             self.moves.remove('Left')
         if self.player_loc == self.merchant_loc:
             self.moves.append('Merchant')
-        if self.player_loc == self.gb:
+        for item in self.exits:
+            if self.player_loc == self.exits[item] and item in self.room_list:
+                self.moves.append('Forward')
+        if self.player_loc == self.exits['a']:
             self.moves.append('Back')
         elif self.player_loc in self.chosen_exits:
             self.moves.append('Door')
