@@ -17,7 +17,9 @@ class Character:
 
         CLASSES = ['rogue', 'warrior', 'cleric', 'wizard']
 
-        name = input("""Hi!  Welcome!  You don't have a character yet.  Let's make one! What's your character's name? >""")
+        name = input("""Hi!  Welcome!  You don't have a character yet.
+
+        Let's make one! What's your character's name? >""")
 
         ht = input("Great!  How tall is your character? >")
         ec = input("Cool!  What color are your characters eyes? >")
@@ -39,10 +41,11 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
 
                 from library import Rogue
                 toon = Rogue(5, 9, 2)
-                print("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}".format(toon.strn,
-                                                                                      toon.dex,
-                                                                                      toon.con))
+                print("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}".
+                format(toon.strn, toon.dex, toon.con))
+
                 break
+
             elif which_class.lower() == CLASSES[1]:
 
                 from library import Warrior
