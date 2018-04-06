@@ -15,8 +15,8 @@ def cls():
 
 variable= "I'm adding a random string variable for git testing"
 
-#####   SET INITIAL CONDITIONS  #####
 
+#####   SET INITIAL CONDITIONS  #####
 ## This makes the dictionary that will contain key=room_num, value=Merchant()
 merchant_dict = {}
 
@@ -25,8 +25,8 @@ toon = Character()
 toon.create_character()
 
 ## This makes the first room and makes it merchant, assigns it to the merch_dict
-room = Room('0')
-room.player_loc = (0,0)
+room = Room()
+room.player_loc = room.get_location()
 room.merchant_loc = room.get_location()
 merchant_dict[room.room_num] = Merchant()
 
@@ -86,58 +86,22 @@ Go ahead, do a victory lap!""")
             print(item)
         input("Press return to continue. >")
 
-    ## If player_loc = player_gb, they're standing on the door they came in from
-    ## Not really, they can type this whenever and it might give an error but
-    ## either way it has to be fixed, for all these if statements that require
-    ## the player's pos to be on a door or merch, I need to check somewhere
-    ## other than avail_moves that they are actually there.
+    
     if info == 'back':
 
-        ## Reset the room to the one they came in from, set player_loc to the
-        ## door they left out of
-        room = room.room_list[room.old_room]
-        room.player_loc = room.door_used
+        room = room.go_back() 
 
-    ## If they're standing on a door (again, not really...)
     if info == 'door':
 
-        ## sets room.door to the name of the door they left out of.  It checks
-        ## if the player's loc is any of the three exits, and if it is, then it
-        ## sets the key of that value to room.door
-        for item in room.exits_dict:
-            if room.player_loc == room.exits_dict[item]:
-                room.door = item
+        room = room.new_room()       
 
-        ## If the door they're trying to leave out of is already saved as an
-        ## instance, then load that instance (merch data is already preserved!)
-        if room.door in room.room_list:
-            room = room.room_list[room.door]
-
-        ## If it's not already in the instance dict (room.room_list), then make
-        ## a new room.  Set the player's loc to the first exit in the list
-        ## (room_num + 'a') bc whatever, get a new random merchant location from
-        ## the list of
-        ## cells (see the get_location method under rooms), and then make a new
-        ## merchant for that room, add it to the dictionary of merchants (re:
-        ## preserved).
-        else:
-
-            room = room.new_room()
-            room.player_loc = room.exits_list[0]
-            room.player_gb = room.player_loc
-            room.merchant_loc = room.get_location()
-            merchant_dict[room.room_num] = Merchant()
-
-
+        
         ## Curently broken.
     if info == 'forward':
 
-        room = room.room_list[(room.room_num + 1)]
-        room.player_loc = room.player_ll
+        room = room.go_forward()
 
-        ## If they're standing on a merchant, set the current merchant to the
-        ## one assigned to the current room, and then run it's activation method
-        ## see activate(self) under merchants
+        
     if info == 'merchant':
         merchant = merchant_dict[room.room_num]
         item = merchant.activate(toon.inventory)
