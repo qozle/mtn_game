@@ -35,45 +35,43 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
             print(item + "\n")
 
         while True:
-            which_class = input("What class do you want to be? {} >".format(CLASSES))
+            which_class = input("What class do you want to be? {} >".
+                                format(CLASSES))
 
             if which_class.lower() == CLASSES[0]:
 
-                from library import Rogue
                 toon = Rogue(5, 9, 2)
                 print("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}".
-                format(toon.strn, toon.dex, toon.con))
+                      format(toon.strn, toon.dex, toon.con))
 
                 break
 
             elif which_class.lower() == CLASSES[1]:
 
-                from library import Warrior
+                
                 toon = Warrior(9, 4, 7)
-                print("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}".format(toon.strn,
-                                                                                      toon.dex,
-                                                                                      toon.con))
+                print("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}".
+                      format(toon.strn, toon.dex, toon.con))
                 break
             elif which_class.lower() == CLASSES[2]:
 
-                from library import Cleric
+                
                 toon = Cleric(5, 7, 6)
-                print("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}".format(toon.strn,
-                                                                                      toon.dex,
-                                                                                      toon.con))
+                print("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}".
+                      format(toon.strn, toon.dex, toon.con))
                 break
             elif which_class.lower() == CLASSES[3]:
 
-                from library import Wizard
+                
                 toon = Wizard(2, 6, 3)
-                print("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}".format(toon.strn,
-                                                                                       toon.dex,
-                                                                                       toon.con))
+                print("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}".
+                      format(toon.strn, toon.dex, toon.con))
                 break
 
             else:
 
-                input("Sorry, that's not one of the choices, press return to try again.")
+                input(
+                    "Sorry, that's not one of the choices, press return to try again.")
                 pass
         return toon
 
