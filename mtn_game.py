@@ -27,10 +27,9 @@ toon.create_character()
 ## This makes the first room and makes it merchant, assigns it to the merch_dict
 
 room = Room()
-room.player_loc = room.get_location()
+room.make_doors()
+room.player_loc = room.doors['back'][1]
 room.merchant_loc = room.get_location()
-merchant_dict[room.room_num] = Merchant()
-room.room_list[room.room_idt] = room
 
 ## This makes a temp merchant to take it inventory bc I'm lazy
 invis_merchant = Merchant()
@@ -95,24 +94,14 @@ Go ahead, do a victory lap!""")
 
     if info == 'door':
 
-        ## Get new room number
-        room_num = room.room_num + 1
-        ## Get new room label
-        for item in room.exits:
-            if room.player_loc == room.exits[item]:
-                room_label = item
-        ## Get new room idt
-        room_idt = str(room_num) + room_label
-        ## Add self to the room list
-        room.room_list[room.room_idt] = room
-        room_list = room.room_list
-        ## Make "last_room" self.  Used for going back.  Not sure how else to do it
-        ## considering that room_list is a dict.
-        last_room = room
-        ## Pack it all up because I guess I'm fancy and it's easier?
-        room_info = room_num, room_label, room_idt, room_list, last_room
-
-        room = room.new_room(room_info)       
+        for item in room.doors:
+            if room.player_loc == room.doors[item][1]:
+                room = room.doors[item][0]
+                
+                room.make_doors()
+                room.player_loc = room.doors['back'][1]
+                room.merchant_loc = room.get_location()
+                
 
         
         
