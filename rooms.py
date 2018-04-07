@@ -5,7 +5,7 @@ import random
 class Room:
 
     ##### DEFINE INITALIZE CONDITIONS #####
-    def __init__(self, room_num=0, room_label="a",room_idt="0", lastroom="", **kwargs):
+    def __init__(self, room_num=0, room_label="a",room_idt="0", lastroom=None, **kwargs):
 
         
         self.cells = [] 
@@ -16,6 +16,7 @@ class Room:
         self.room_num = room_num 
         self.room_label = room_label
         self.room_idt = room_idt
+        self.lastroom = lastroom
               
         
         self.length = random.randrange(1, 11) 
@@ -68,34 +69,15 @@ class Room:
         newroom.merchant_loc = newroom.get_location()
 
         return newroom
+
         
     #####  FUNCTION FOR GOING BACK  #####
     def go_back(self):
 
-        self.room_list[self.room_idt] = self
-        oldroom = self.last_room
-        oldroom.room_list = self.room_list
-        
-
+        oldroom = self.lastroom
         return oldroom
 
 
-    #####  FUNCTION FOR GOING FORWARD  #####
-    def go_forward(self):
-
-        label = ""
-        self.player_ll = self.player_loc
-        for item in self.exits:
-            if self.player_loc == self.exits[item]:
-                label = item
-
-        for item in self.exits_used:
-            if label == item:
-                newroom = self.exits_used[item]
-
-        return newroom
-        
-       
     #####  FUNCTION FOR GETTING AVAILABLE MOVES #####
     def avail_moves(self):
 

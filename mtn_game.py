@@ -44,7 +44,7 @@ while True:
 
     room.draw_map()
     print("\n\n")
-    print("ROOM {} ".format(room.room_num) * 6)
+    print("ROOM {} ".format(room.room_idt) * 6)
 
     ## This checks for the win condition
     inv_set = set()
@@ -89,8 +89,9 @@ Go ahead, do a victory lap!""")
 
     
     if info == 'back':
-        
-        room = room.go_back() 
+
+        if room.player_loc == room.doors['back'][1]:
+            room = room.go_back() 
 
     if info == 'door':
 
@@ -101,16 +102,7 @@ Go ahead, do a victory lap!""")
                 room.make_doors()
                 room.player_loc = room.doors['back'][1]
                 room.merchant_loc = room.get_location()
-                
 
-        
-        
-        ## Curently broken.
-    if info == 'forward':
-
-        room = room.go_forward()
-
-        
     if info == 'merchant':
         merchant = merchant_dict[room.room_num]
         item = merchant.activate(toon.inventory)
