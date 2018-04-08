@@ -7,6 +7,10 @@ class Character:
     def __init__(self, *args, **kwargs):
 
             self.inventory = ['Torch', 'Book', 'Dagger']
+            self.skills = [] # Skills fully trained
+            self.skill_books = [] # Skills trainable
+            self.current_skill = None # Skill that's currently training
+            
 
             for key, value in kwargs.items():
                 setattr(self, key, value)
@@ -40,7 +44,7 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
 
             if which_class.lower() == CLASSES[0]:
 
-                toon = Rogue(5, 9, 2)
+                toon = Rogue()
                 print("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}".
                       format(toon.strn, toon.dex, toon.con))
 
@@ -49,21 +53,21 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
             elif which_class.lower() == CLASSES[1]:
 
                 
-                toon = Warrior(9, 4, 7)
+                toon = Warrior()
                 print("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}".
                       format(toon.strn, toon.dex, toon.con))
                 break
             elif which_class.lower() == CLASSES[2]:
 
                 
-                toon = Cleric(5, 7, 6)
+                toon = Cleric()
                 print("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}".
                       format(toon.strn, toon.dex, toon.con))
                 break
             elif which_class.lower() == CLASSES[3]:
 
                 
-                toon = Wizard(2, 6, 3)
+                toon = Wizard()
                 print("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}".
                       format(toon.strn, toon.dex, toon.con))
                 break
@@ -83,12 +87,12 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
 #####  CLASSES, CHILD CLASS OF CHARACTER  #####
 class Rogue(Character):
 
-    def __init__(self, strn, dex, con, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.strn = strn
-        self.dex = dex
-        self.con = con
+        self.strn = 7
+        self.dex = 9
+        self.con = 3
 
         for key, value in kwargs.items():
                 setattr(self, key, value)
@@ -97,12 +101,12 @@ class Rogue(Character):
 
 class Warrior(Character):
 
-    def __init__(self, strn, dex, con, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.strn = strn
-        self.dex = dex
-        self.con = con
+        self.strn = 9
+        self.dex = 4
+        self.con = 7
 
         for key, value in kwargs.items():
                 setattr(self, key, value)
@@ -111,12 +115,12 @@ class Warrior(Character):
 
 class Cleric(Character):
 
-    def __init__(self, strn, dex, con, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.strn = strn
-        self.dex = dex
-        self.con = con
+        self.strn = 5
+        self.dex = 7
+        self.con = 6
 
         for key, value in kwargs.items():
                 setattr(self, key, value)
@@ -125,12 +129,12 @@ class Cleric(Character):
 
 class Wizard(Character):
 
-    def __init__(self, strn, dex, con, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.strn = strn
-        self.dex = dex
-        self.con = con
+        self.strn = 3
+        self.dex = 5
+        self.con = 3
 
         for key, value in kwargs.items():
                 setattr(self, key, value)

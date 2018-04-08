@@ -3,6 +3,8 @@ import os
 from character import *
 from rooms import *
 from merchants import *
+from skills import *
+from time import time, ctime
 
 ## I'm testing to see if this affects just the local branch and not master, as
 ## should
@@ -66,7 +68,48 @@ while True:
     info = input('\nWhat do you want to do?  [Help] for help.  You can move {}. >'.format
                  (room.avail_moves()))
     info = info.lower()
+    info = info.strip()
 
+    if info == 'skills':
+        
+        SKILLS = ['wit', 'haggle', 'jump', 'climb', 'focus']
+        for item in toon.inventory:
+            if item.lower() in SKILLS:
+                toon.skill_books.append(toon.inventory.pop(toon.inventory.index(item)))
+        
+        while True:
+            
+            cls()
+            print("""   This is the skills page.  You can see the skill books you've aquired,
+which skills you've trained, and information on what skill you're currently training.\n""")
+            
+            if toon.current_skill == None:
+                print("You are not currently training anything")
+
+            else:
+                print("""You are currently training {}. You started training it {}. It's train time is {}.
+It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current_skill.start), toon.current_skill.train_time,
+                                 ctime(toon.current_skill.finish)))
+
+            print("You can currently train:\n")
+
+            for item in toon.skill_books:
+                print("-" + str(item) + "\n")
+
+            info = input("""Enter a skill book to begin training it, or [Back]. >""")
+            info = info.lower()
+            info = info.strip()
+
+            
+            for item in toon.skill_books:
+                if item.lower() == info:
+                    skill = toon.skill_books.pop(toon.skill_books.index(item))
+                    skill = Skill(time(), 15, skill)
+                    toon.current_skill = skill
+            if info == 'back':
+                info = 'none'
+                break       
+            
     if info == 'left' or 'right' or 'up' or 'down':
         room.move_player(info)
 

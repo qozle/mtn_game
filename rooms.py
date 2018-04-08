@@ -19,8 +19,6 @@ class Room:
         self.room_idt = room_idt
         self.lastroom = lastroom
         self.merchant = Merchant()
-              
-        
         self.length = random.randrange(1, 11) 
         self.width = random.randrange(1, 11) 
 
@@ -45,7 +43,6 @@ class Room:
         self.doors = {'back': [lastroom, a], 'a':['rooma', b], 'b':['roomb', c]}
                     
 
-
     def make_doors(self):
         rooma_info = self.room_num+1, 'a', str(self.room_num+1)+'a', self
         roomb_info = self.room_num+1, 'b', str(self.room_num+1)+'b', self
@@ -57,15 +54,10 @@ class Room:
         self.doors['b'][0] = roomb
 
        
-        
-            
-        
     #####  FUNCTION FOR MAKING NEW ROOM  #####  
     def new_room(self, room_info):
 
         room_num, room_label, room_idt, lastroom = room_info
-
-        
         newroom = Room(room_num, room_label, room_idt, lastroom)
         newroom.player_loc = newroom.get_location()
         newroom.merchant_loc = newroom.get_location()
