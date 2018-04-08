@@ -1,4 +1,5 @@
 import random
+from merchants import *
 
 
 
@@ -17,6 +18,7 @@ class Room:
         self.room_label = room_label
         self.room_idt = room_idt
         self.lastroom = lastroom
+        self.merchant = Merchant()
               
         
         self.length = random.randrange(1, 11) 
@@ -41,7 +43,7 @@ class Room:
         self.door_coords = [a, b, c]
         # Initiate doors dict
         self.doors = {'back': [lastroom, a], 'a':['rooma', b], 'b':['roomb', c]}
-            
+                    
 
 
     def make_doors(self):
@@ -125,8 +127,6 @@ class Room:
 
         print(" _" * (self.width + 1))
         tile = "|{}"
-
-        
 
         for cell in self.cells:
             x, y = cell

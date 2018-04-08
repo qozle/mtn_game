@@ -34,19 +34,11 @@ room.merchant_loc = room.get_location()
 ## This makes a temp merchant to take it inventory bc I'm lazy
 invis_merchant = Merchant()
 win_list = set(invis_merchant.inventory_list)
-del invis_merchant
+invis_merchant
 
 
-
-##### MAIN WHILE LOOP #####
-
-while True:
-
-    room.draw_map()
-    print("\n\n")
-    print("ROOM {} ".format(room.room_idt) * 6)
-
-    ## This checks for the win condition
+## This checks for the win condition
+def win_check():
     inv_set = set()
     for item in toon.inventory:
         inv_set.add(str(item))
@@ -61,25 +53,27 @@ You win!!  There's not much more to do, but you can keep walking around!
 Go ahead, do a victory lap!""")
 
 
-    ## Takes the player's input, fills in the format with the return from
-    ## avail_moves (see avail_moves() under rooms), sets the return from
-    ## input to lower case.
+##### MAIN WHILE LOOP #####
+
+while True:
+
+    room.draw_map()
+    print("\n\n")
+    print("ROOM {} ".format(room.room_idt) * 6)
+
+    win_check()
+    
     info = input('\nWhat do you want to do?  [Help] for help.  You can move {}. >'.format
                  (room.avail_moves()))
     info = info.lower()
 
-    ## If it's any of the moves, then run the move_player method (see move_player
-    ## under rooms)
     if info == 'left' or 'right' or 'up' or 'down':
         room.move_player(info)
 
-    ## If it's help, print the help junk on the current instance (see help() under
-    ## rooms)
     if info == 'help':
         cls()
         room.help()
 
-    ## Cls (clear the screen), print inventory, wait for input to ctn
     if info == 'inv':
         cls()
         print("You have the following items in your inventory:" + "\n")
@@ -89,12 +83,10 @@ Go ahead, do a victory lap!""")
 
     
     if info == 'back':
-
         if room.player_loc == room.doors['back'][1]:
             room = room.go_back() 
 
     if info == 'door':
-
         for item in room.doors:
             if room.player_loc == room.doors[item][1]:
                 room = room.doors[item][0]
@@ -104,32 +96,27 @@ Go ahead, do a victory lap!""")
                 room.merchant_loc = room.get_location()
 
     if info == 'merchant':
-        merchant = merchant_dict[room.room_num]
-        item = merchant.activate(toon.inventory)
 
-        ## Also currently broken.  This is some bullshit to sort out the return
-        ## info from merchant.activate(). I just have to rewrite it and sort it
-        ## out.
-        while True:
+        if room.player_loc == room.merchant_loc:
 
-            try:
-                if set(item).issubset(set(toon.inventory)):
-                    toon.inventory = item
-            except:
+            while True:
+                info = room.merchant.activate(toon.inventory)
+                info = info.lower()
 
-                item = 'back'
-                continue
+                if info == 'buy':
+                    info = room.merchant.buy(toon.inventory)
+                    if info == 'back': break
+                    else: toon.inventory = info
 
-            if item == 'back':
-                break
+                if info == 'sell':
+                    info = room.merchant.sell(toon.inventory)
+                    if info == 'back': break
+                    else: toon.inventory = info
 
-            else:
-                toon.inventory += [item]
+                if info == 'back': break
+                    
 
-    ## If you're lazy and want to check that the win condition works without
-    ## going through the whole game like a crazy person (ok, I tried three times
-    ## and had some bugs, but I think it would actually work), this just adds
-    ## all the items to the player's inventory_list.  =)
+    # Check that the victory condition works
     if info == 'cheat':
         toon.inventory += invis_merchant.inventory_list
 
