@@ -90,7 +90,7 @@ class Room:
             self.moves.append('Merchant')
         if self.player_loc == self.doors['back'][1] and not self.room_num == 0:
             self.moves.append('Back')
-        elif self.player_loc in self.door_coords:
+        elif self.player_loc in self.door_coords and not self.player_loc == self.doors['back'][1]:
             self.moves.append('Door')
 
         return self.moves

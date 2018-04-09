@@ -1,6 +1,13 @@
 import random
 import os
 
+## Function for clearing the screen, this should probably just be imported
+def cls():
+
+    os.system("cls" if os.name == "nt" else "clear")
+
+variable= "I'm adding a random string variable for git testing"
+
 
 class Character:
 
@@ -20,15 +27,14 @@ class Character:
     def create_character(self):
 
         CLASSES = ['rogue', 'warrior', 'cleric', 'wizard']
+        cls()
+        print("Hi!  Welcome!  You don't have a character yet.\n")
 
-        name = input("""Hi!  Welcome!  You don't have a character yet.
-
-        Let's make one! What's your character's name? >""")
+        name = input("Let's make one! What's your character's name? >")
 
         ht = input("Great!  How tall is your character? >")
         ec = input("Cool!  What color are your characters eyes? >")
         hair = input("Nice!  What color is your character's hair? >")
-
         toon = Character(name=name, ht=ht, ec=ec, hair=hair)
 
         print("""
@@ -43,40 +49,33 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
                                 format(CLASSES))
 
             if which_class.lower() == CLASSES[0]:
-
                 toon = Rogue()
-                print("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}".
+                input("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
                       format(toon.strn, toon.dex, toon.con))
-
                 break
 
             elif which_class.lower() == CLASSES[1]:
-
-                
                 toon = Warrior()
-                print("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}".
+                input("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
                       format(toon.strn, toon.dex, toon.con))
                 break
+            
             elif which_class.lower() == CLASSES[2]:
-
-                
                 toon = Cleric()
-                print("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}".
+                input("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
                       format(toon.strn, toon.dex, toon.con))
                 break
-            elif which_class.lower() == CLASSES[3]:
 
-                
+            elif which_class.lower() == CLASSES[3]:
                 toon = Wizard()
-                print("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}".
+                input("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
                       format(toon.strn, toon.dex, toon.con))
                 break
 
             else:
-
                 input(
                     "Sorry, that's not one of the choices, press return to try again.")
-                pass
+                
         return toon
 
 

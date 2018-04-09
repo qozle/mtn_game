@@ -18,7 +18,8 @@ def cls():
 variable= "I'm adding a random string variable for git testing"
 
 
-#####   SET INITIAL CONDITIONS  #####
+                    #####   SET INITIAL CONDITIONS  #####
+
 ## This makes the dictionary that will contain key=room_num, value=Merchant()
 merchant_dict = {}
 
@@ -27,7 +28,6 @@ toon = Character()
 toon.create_character()
 
 ## This makes the first room and makes it merchant, assigns it to the merch_dict
-
 room = Room()
 room.make_doors()
 room.player_loc = room.doors['back'][1]
@@ -59,6 +59,7 @@ Go ahead, do a victory lap!""")
 
 while True:
 
+    cls()
     room.draw_map()
     print("\n\n")
     print("ROOM {} ".format(room.room_idt) * 6)
@@ -78,9 +79,8 @@ while True:
                 toon.skill_books.append(toon.inventory.pop(toon.inventory.index(item)))
         
         while True:
-            
             cls()
-            print("""   This is the skills page.  You can see the skill books you've aquired,
+            print("""This is the skills page.  You can see the skill books you've aquired,
 which skills you've trained, and information on what skill you're currently training.\n""")
             
             if toon.current_skill == None:
@@ -106,6 +106,7 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current
                     skill = toon.skill_books.pop(toon.skill_books.index(item))
                     skill = Skill(time(), 15, skill)
                     toon.current_skill = skill
+
             if info == 'back':
                 info = 'none'
                 break       
@@ -124,24 +125,28 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current
             print(item)
         input("Press return to continue. >")
 
-    
     if info == 'back':
-        if room.player_loc == room.doors['back'][1]:
-            room = room.go_back() 
+        if room.player_loc == room.doors['back'][1] and room.room_num != 0:
+            room = room.go_back()
+        else: print("You can't go out this door yet sorry =(")
 
     if info == 'door':
-        for item in room.doors:
-            if room.player_loc == room.doors[item][1]:
-                room = room.doors[item][0]
-                
-                room.make_doors()
-                room.player_loc = room.doors['back'][1]
-                room.merchant_loc = room.get_location()
+        if room.player_loc == room.doors['a'][1] or room.player_loc == room.doors['b'][1]:
+            for item in room.doors:
+                if room.player_loc == room.doors[item][1]:
+                    room = room.doors[item][0]
+                    room.make_doors()
+                    room.player_loc = room.doors['back'][1]
+                    room.merchant_loc = room.get_location()
+
+        elif room.player_loc == room.doors['back'][1]:
+            print("This door only goes back, use [Back].")
+
+        else:
+            print("You're not on a valid door =(")
 
     if info == 'merchant':
-
         if room.player_loc == room.merchant_loc:
-
             while True:
                 info = room.merchant.activate(toon.inventory)
                 info = info.lower()
@@ -168,4 +173,4 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current
         break
 
 
-    cls()
+    

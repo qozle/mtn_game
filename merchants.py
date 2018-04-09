@@ -46,15 +46,15 @@ class Merchant:
         cls()
 
         print('\n')
-        print("Hi, my name's {}.  {}".format(self.name, self.greeting))
+        print("Hi, my name's {}.  {}".format(self.name[0], self.greeting[0]))
         print('\n')
-        print("Here's what I have to sell:")
-        print('\n')
-        for item in player_inv: print("-" + str(item) + '\n')
-        print('\n')
-        print("Here's what you  have to sell:")
+        print("Here's my inventory:")
         print('\n')
         for item in self.inventory: print("-" + str(item) + '\n')
+        print('\n')
+        print("Here's what you have:")
+        print('\n')
+        for item in player_inv: print("-" + str(item) + '\n')
         info = input("You can [Buy], [Sell], or go [Back]. >")
 
         return info 
@@ -87,9 +87,7 @@ class Merchant:
                 return player_inv
         if info == back:
             return "back"
-
         
-            
 
 
 
