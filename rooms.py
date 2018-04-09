@@ -1,23 +1,17 @@
 import random
-from merchants import *
 
 
 
 class Room:
 
     ##### DEFINE INITALIZE CONDITIONS #####
-<<<<<<< HEAD
     def __init__(self, room_num=0, room_label="a", exits_used = {}, room_list = {}, gb=[], last_room=[], **kwargs):
-=======
-    def __init__(self, room_num=0, room_label="a",room_idt="0", lastroom=None, **kwargs):
->>>>>>> max's-branch
 
         
-        self.cells = [] 
-        self.xlist = [] 
-        self.ylist = [] 
+        self.cells = [] # map cells, list of tuples (coords)
+        self.xlist = [] # x coords to be generated
+        self.ylist = [] # y coords to be generated
         self.player_loc = []
-<<<<<<< HEAD
         self.merchant_loc = []
         self.exits = {} # list to contain the border cells of the map
         self.room_num = room_num # room's identity holder
@@ -48,26 +42,8 @@ class Room:
         for xcoord in self.xlist:
             for ycoord in self.ylist:
                 x, y = xcoord, ycoord
-=======
-        self.merchant_loc = [] 
-        self.room_num = room_num 
-        self.room_label = room_label
-        self.room_idt = room_idt
-        self.lastroom = lastroom
-        self.merchant = Merchant()
-        self.length = random.randrange(1, 11) 
-        self.width = random.randrange(1, 11) 
-
-        # Populate cells list (map)
-        for x in range(self.length+1):
-            for y in range(self.width+1):
->>>>>>> max's-branch
                 self.cells.extend([(x, y)])
-                
-        for key, value in kwargs.items():
-            setattr(self, key, value)
 
-<<<<<<< HEAD
         count = 0
         exits_list = []
         ## creates a new list of cells which is all the border cells on the
@@ -92,26 +68,14 @@ class Room:
         label = 'abc'
         for item in self.chosen_exits:
             self.exits[label[self.chosen_exits.index(item)]] = item
-=======
-        # Build a list of all the border cells to choose doors from 
-        door_list = []
-        for cell in self.cells:
-            x, y = cell
-            if x == 0 or x == self.length or y == 0 or y == self.width:
-                door_list.extend([cell])
 
-        a, b, c = random.sample(door_list, 3)
-        self.door_coords = [a, b, c]
-        # Initiate doors dict
-        self.doors = {'back': [lastroom, a], 'a':['rooma', b], 'b':['roomb', c]}
-                    
->>>>>>> max's-branch
+        
+        ## Just take in whatever key:value arguments (KWARGS = Key Word Arguments) that we spit in and set them
+        ## as current attributes for the self (cuurent instance)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+            
 
-    def make_doors(self):
-        rooma_info = self.room_num+1, 'a', str(self.room_num+1)+'a', self
-        roomb_info = self.room_num+1, 'b', str(self.room_num+1)+'b', self
-
-<<<<<<< HEAD
     #####  FUNCTION FOR MAKING NEW ROOM  #####  This makes a new room and sends over any of the old rooms data.
     def new_room(self):
 
@@ -152,31 +116,6 @@ class Room:
         for item in self.exits:
             if self.player_loc == self.exits[item]:
                 label = item
-=======
-        rooma = self.new_room(rooma_info)
-        roomb = self.new_room(roomb_info)
-
-        self.doors['a'][0] = rooma
-        self.doors['b'][0] = roomb
-
-       
-    #####  FUNCTION FOR MAKING NEW ROOM  #####  
-    def new_room(self, room_info):
-
-        room_num, room_label, room_idt, lastroom = room_info
-        newroom = Room(room_num, room_label, room_idt, lastroom)
-        newroom.player_loc = newroom.get_location()
-        newroom.merchant_loc = newroom.get_location()
-
-        return newroom
-
-        
-    #####  FUNCTION FOR GOING BACK  #####
-    def go_back(self):
-
-        oldroom = self.lastroom
-        return oldroom
->>>>>>> max's-branch
 
         for item in self.exits_used:
             if label == item:
@@ -190,15 +129,11 @@ class Room:
 
         x, y = self.player_loc
         self.moves = ['Up', 'Down', 'Left', 'Right']
-<<<<<<< HEAD
         for item in self.exits_used:
             if self.player_loc == self.exits_used[item]:
                 self.moves.append('Forward')
         if self.player_loc == self.player_ll:
             self.moves.append('Forward')
-=======
-        
->>>>>>> max's-branch
         if x == self.length:
             self.moves.remove('Down')
         if x == 0:
@@ -209,13 +144,9 @@ class Room:
             self.moves.remove('Left')
         if self.player_loc == self.merchant_loc:
             self.moves.append('Merchant')
-<<<<<<< HEAD
         if self.player_loc == self.gb:
-=======
-        if self.player_loc == self.doors['back'][1] and not self.room_num == 0:
->>>>>>> max's-branch
             self.moves.append('Back')
-        elif self.player_loc in self.door_coords and not self.player_loc == self.doors['back'][1]:
+        elif self.player_loc in self.chosen_exits:
             self.moves.append('Door')
 
         return self.moves
@@ -245,6 +176,8 @@ class Room:
         print(" _" * (self.width + 1))
         tile = "|{}"
 
+        
+
         for cell in self.cells:
             x, y = cell
             if y < self.width:
@@ -253,7 +186,7 @@ class Room:
                     output = tile.format("X")
                 elif cell == self.merchant_loc:
                     output = tile.format("M")
-                elif cell in self.door_coords:
+                elif cell in self.chosen_exits:
                     output = tile.format("D")
                 else:
                     output = tile.format("_")
@@ -263,7 +196,7 @@ class Room:
                     output = tile.format('X|')
                 elif cell == self.merchant_loc:
                     output = tile.format('M|')
-                elif cell in self.door_coords:
+                elif cell in self.chosen_exits:
                     output = tile.format('D|')
                 else:
                     output = tile.format('_|')
