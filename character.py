@@ -30,13 +30,7 @@ class Character:
         cls()
         print("Hi!  Welcome!  You don't have a character yet.\n")
 
-<<<<<<< HEAD
-        name = input("""Hi!  Welcome!  You don't have a character yet.
-
-        Let's make one! What's your character's name? >""")
-=======
         name = input("Let's make one! What's your character's name? >")
->>>>>>> max's-branch
 
         ht = input("Great!  How tall is your character? >")
         ec = input("Cool!  What color are your characters eyes? >")
@@ -55,20 +49,6 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
                                 format(CLASSES))
 
             if which_class.lower() == CLASSES[0]:
-<<<<<<< HEAD
-
-                toon = Rogue(5, 9, 2)
-                print("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}".
-                      format(toon.strn, toon.dex, toon.con))
-
-                break
-
-            elif which_class.lower() == CLASSES[1]:
-
-                
-                toon = Warrior(9, 4, 7)
-                print("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}".
-=======
                 toon = Rogue()
                 input("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
                       format(toon.strn, toon.dex, toon.con))
@@ -77,46 +57,25 @@ have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair)
             elif which_class.lower() == CLASSES[1]:
                 toon = Warrior()
                 input("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
->>>>>>> max's-branch
                       format(toon.strn, toon.dex, toon.con))
                 break
             
             elif which_class.lower() == CLASSES[2]:
-<<<<<<< HEAD
-
-                
-                toon = Cleric(5, 7, 6)
-                print("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}".
-=======
                 toon = Cleric()
                 input("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
->>>>>>> max's-branch
                       format(toon.strn, toon.dex, toon.con))
                 break
 
-<<<<<<< HEAD
-                
-                toon = Wizard(2, 6, 3)
-                print("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}".
-=======
             elif which_class.lower() == CLASSES[3]:
                 toon = Wizard()
                 input("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
->>>>>>> max's-branch
                       format(toon.strn, toon.dex, toon.con))
                 break
 
             else:
-<<<<<<< HEAD
-
-                input(
-                    "Sorry, that's not one of the choices, press return to try again.")
-                pass
-=======
                 input(
                     "Sorry, that's not one of the choices, press return to try again.")
                 
->>>>>>> max's-branch
         return toon
 
 
