@@ -3,6 +3,8 @@ import os
 from character import *
 from rooms import *
 from merchants import *
+from skills import *
+from time import time, ctime
 
 ## I'm testing to see if this affects just the local branch and not master, as
 ## should
@@ -16,7 +18,8 @@ def cls():
 variable= "I'm adding a random string variable for git testing"
 
 
-#####   SET INITIAL CONDITIONS  #####
+                    #####   SET INITIAL CONDITIONS  #####
+
 ## This makes the dictionary that will contain key=room_num, value=Merchant()
 merchant_dict = {}
 
@@ -25,29 +28,19 @@ toon = Character()
 toon.create_character()
 
 ## This makes the first room and makes it merchant, assigns it to the merch_dict
-
 room = Room()
-room.player_loc = room.get_location()
+room.make_doors()
+room.player_loc = room.doors['back'][1]
 room.merchant_loc = room.get_location()
-merchant_dict[room.room_num] = Merchant()
-room.room_list[room.room_idt] = room
 
 ## This makes a temp merchant to take it inventory bc I'm lazy
 invis_merchant = Merchant()
 win_list = set(invis_merchant.inventory_list)
-del invis_merchant
+invis_merchant
 
 
-
-##### MAIN WHILE LOOP #####
-
-while True:
-
-    room.draw_map()
-    print("\n\n")
-    print("ROOM {} ".format(room.room_num) * 6)
-
-    ## This checks for the win condition
+## This checks for the win condition
+def win_check():
     inv_set = set()
     for item in toon.inventory:
         inv_set.add(str(item))
@@ -62,25 +55,69 @@ You win!!  There's not much more to do, but you can keep walking around!
 Go ahead, do a victory lap!""")
 
 
-    ## Takes the player's input, fills in the format with the return from
-    ## avail_moves (see avail_moves() under rooms), sets the return from
-    ## input to lower case.
+##### MAIN WHILE LOOP #####
+
+while True:
+
+    cls()
+    room.draw_map()
+    print("\n\n")
+    print("ROOM {} ".format(room.room_idt) * 6)
+
+    win_check()
+    
     info = input('\nWhat do you want to do?  [Help] for help.  You can move {}. >'.format
                  (room.avail_moves()))
     info = info.lower()
+    info = info.strip()
 
-    ## If it's any of the moves, then run the move_player method (see move_player
-    ## under rooms)
+    if info == 'skills':
+        
+        SKILLS = ['wit', 'haggle', 'jump', 'climb', 'focus']
+        for item in toon.inventory:
+            if item.lower() in SKILLS:
+                toon.skill_books.append(toon.inventory.pop(toon.inventory.index(item)))
+        
+        while True:
+            cls()
+            print("""This is the skills page.  You can see the skill books you've aquired,
+which skills you've trained, and information on what skill you're currently training.\n""")
+            
+            if toon.current_skill == None:
+                print("You are not currently training anything")
+
+            else:
+                print("""You are currently training {}. You started training it {}. It's train time is {}.
+It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current_skill.start), toon.current_skill.train_time,
+                                 ctime(toon.current_skill.finish)))
+
+            print("You can currently train:\n")
+
+            for item in toon.skill_books:
+                print("-" + str(item) + "\n")
+
+            info = input("""Enter a skill book to begin training it, or [Back]. >""")
+            info = info.lower()
+            info = info.strip()
+
+            
+            for item in toon.skill_books:
+                if item.lower() == info:
+                    skill = toon.skill_books.pop(toon.skill_books.index(item))
+                    skill = Skill(time(), 15, skill)
+                    toon.current_skill = skill
+
+            if info == 'back':
+                info = 'none'
+                break       
+            
     if info == 'left' or 'right' or 'up' or 'down':
         room.move_player(info)
 
-    ## If it's help, print the help junk on the current instance (see help() under
-    ## rooms)
     if info == 'help':
         cls()
         room.help()
 
-    ## Cls (clear the screen), print inventory, wait for input to ctn
     if info == 'inv':
         cls()
         print("You have the following items in your inventory:" + "\n")
@@ -88,67 +125,46 @@ Go ahead, do a victory lap!""")
             print(item)
         input("Press return to continue. >")
 
-    
     if info == 'back':
-        
-        room = room.go_back() 
+        if room.player_loc == room.doors['back'][1] and room.room_num != 0:
+            room = room.go_back()
+        else: print("You can't go out this door yet sorry =(")
 
     if info == 'door':
+        if room.player_loc == room.doors['a'][1] or room.player_loc == room.doors['b'][1]:
+            for item in room.doors:
+                if room.player_loc == room.doors[item][1]:
+                    room = room.doors[item][0]
+                    room.make_doors()
+                    room.player_loc = room.doors['back'][1]
+                    room.merchant_loc = room.get_location()
 
-        ## Get new room number
-        room_num = room.room_num + 1
-        ## Get new room label
-        for item in room.exits:
-            if room.player_loc == room.exits[item]:
-                room_label = item
-        ## Get new room idt
-        room_idt = str(room_num) + room_label
-        ## Add self to the room list
-        room.room_list[room.room_idt] = room
-        room_list = room.room_list
-        ## Make "last_room" self.  Used for going back.  Not sure how else to do it
-        ## considering that room_list is a dict.
-        last_room = room
-        ## Pack it all up because I guess I'm fancy and it's easier?
-        room_info = room_num, room_label, room_idt, room_list, last_room
+        elif room.player_loc == room.doors['back'][1]:
+            print("This door only goes back, use [Back].")
 
-        room = room.new_room(room_info)       
+        else:
+            print("You're not on a valid door =(")
 
-        
-        
-        ## Curently broken.
-    if info == 'forward':
-
-        room = room.go_forward()
-
-        
     if info == 'merchant':
-        merchant = merchant_dict[room.room_num]
-        item = merchant.activate(toon.inventory)
+        if room.player_loc == room.merchant_loc:
+            while True:
+                info = room.merchant.activate(toon.inventory)
+                info = info.lower()
 
-        ## Also currently broken.  This is some bullshit to sort out the return
-        ## info from merchant.activate(). I just have to rewrite it and sort it
-        ## out.
-        while True:
+                if info == 'buy':
+                    info = room.merchant.buy(toon.inventory)
+                    if info == 'back': break
+                    else: toon.inventory = info
 
-            try:
-                if set(item).issubset(set(toon.inventory)):
-                    toon.inventory = item
-            except:
+                if info == 'sell':
+                    info = room.merchant.sell(toon.inventory)
+                    if info == 'back': break
+                    else: toon.inventory = info
 
-                item = 'back'
-                continue
+                if info == 'back': break
+                    
 
-            if item == 'back':
-                break
-
-            else:
-                toon.inventory += [item]
-
-    ## If you're lazy and want to check that the win condition works without
-    ## going through the whole game like a crazy person (ok, I tried three times
-    ## and had some bugs, but I think it would actually work), this just adds
-    ## all the items to the player's inventory_list.  =)
+    # Check that the victory condition works
     if info == 'cheat':
         toon.inventory += invis_merchant.inventory_list
 
@@ -157,4 +173,4 @@ Go ahead, do a victory lap!""")
         break
 
 
-    cls()
+    
