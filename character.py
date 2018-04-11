@@ -1,84 +1,70 @@
 import random
 import os
+from pathlib import Path as path
+
 
 ## Function for clearing the screen, this should probably just be imported
 def cls():
 
     os.system("cls" if os.name == "nt" else "clear")
 
-variable= "I'm adding a random string variable for git testing"
-
 
 class Character:
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, charinfo={}, *args, **kwargs):
 
-            self.inventory = ['Torch', 'Book', 'Dagger']
-            self.skills = [] # Skills fully trained
-            self.skill_books = [] # Skills trainable
-            self.current_skill = None # Skill that's currently training
+        self.inventory = ['Torch', 'Book', 'Dagger']
+        self.skills = [] # Skills fully trained
+        self.skill_books = [] # Skills trainable
+        self.current_skill = 'nope' # Skill that's currently training
+
+        for key, value in charinfo.items():
+            setattr(self, key, value)
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+    def load_toon(filename):
+
+        p = path(str(path.cwd()) + "\\saves")
+        directory = sorted(item for item in p.iterdir())
+        
+
+        for item in directory:
+            if item.name == filename:
+                p = path(item.name)
+
+                raw = p.read_text()
+                kwlist = []
+                for item in raw.split("+"):
+                    kwlist.append(item)
+                kwlist.remove('')
+                keys = []
+                prevalues = []
+                for items in kwlist:
+                    keys.append(items.split("-")[0])
+                    prevalues.append(items.split("-")[1])
+                values = []
+                for item in prevalues:
+                    values.append(item.split(","))
+                for item in values:
+                    item.remove('')
+                charinfo = {}
+                for item in keys: charinfo[item] = values[keys.index(item)]
+                charinfo['name'] = charinfo['name'][0]
+                charinfo['ht'] = charinfo['ht'][0]
+                charinfo['ec'] = charinfo['ec'][0]
+                charinfo['hair'] = charinfo['hair'][0]
+                charinfo['current_skill'] = charinfo['current_skill'][0]
+
+                return charinfo
+
             
-
-            for key, value in kwargs.items():
-                setattr(self, key, value)
-
-
-    #####  FUNCTION FOR CREATING A NEW CHARACTER  #####
-    def create_character(self):
-
-        CLASSES = ['rogue', 'warrior', 'cleric', 'wizard']
-        cls()
-        print("Hi!  Welcome!  You don't have a character yet.\n")
-
-        name = input("Let's make one! What's your character's name? >")
-
-        ht = input("Great!  How tall is your character? >")
-        ec = input("Cool!  What color are your characters eyes? >")
-        hair = input("Nice!  What color is your character's hair? >")
-        toon = Character(name=name, ht=ht, ec=ec, hair=hair)
-
-        print("""
-Alright {}, you are {} feet tall, have {} eyes and {} hair.  Also, you
-have this in your inventory:\n""".format(toon.name, toon.ht, toon.ec, toon.hair))
-
-        for item in toon.inventory:
-            print(item + "\n")
-
-        while True:
-            which_class = input("What class do you want to be? {} >".
-                                format(CLASSES))
-
-            if which_class.lower() == CLASSES[0]:
-                toon = Rogue()
-                input("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
-                      format(toon.strn, toon.dex, toon.con))
-                break
-
-            elif which_class.lower() == CLASSES[1]:
-                toon = Warrior()
-                input("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
-                      format(toon.strn, toon.dex, toon.con))
-                break
-            
-            elif which_class.lower() == CLASSES[2]:
-                toon = Cleric()
-                input("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
-                      format(toon.strn, toon.dex, toon.con))
-                break
-
-            elif which_class.lower() == CLASSES[3]:
-                toon = Wizard()
-                input("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}.  Press return to enter. >".
-                      format(toon.strn, toon.dex, toon.con))
-                break
-
-            else:
-                input(
-                    "Sorry, that's not one of the choices, press return to try again.")
                 
-        return toon
-
-
+                
+        
+                
 
 
 

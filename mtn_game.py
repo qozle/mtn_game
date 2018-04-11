@@ -1,13 +1,11 @@
 import random
 import os
+from pathlib import Path as path
 from character import *
 from rooms import *
 from merchants import *
 from skills import *
 from time import time, ctime
-
-## I'm testing to see if this affects just the local branch and not master, as
-## should
 
 
 #####  FUNCTION FOR CLEARING THE SCREEN  #####
@@ -18,26 +16,70 @@ def cls():
 variable= "I'm adding a random string variable for git testing"
 
 
+#####  FUNCTION FOR CREATING NEW CHARACTER  #####
+def new_toon():
+    print("Hi!  Welcome!  You don't have a character yet.  Let's make one!\n")
+    name = input("Let's make one! What's your character's name? >")
+    ht = input("Great!  How tall is your character? >")
+    ec = input("Cool!  What color are your characters eyes? >")
+    hair = input("Nice!  What color is your character's hair? >")
+    toon = Character(name=name, ht=ht, ec=ec, hair=hair)
+
+    print("""
+    Alright {}, you are {} feet tall, have {} eyes and {} hair.
+
+    Also, you have this in your inventory:\n""".format(toon.name, toon.ht,
+                                                       toon.ec, toon.hair))
+    for item in toon.inventory:
+        print(item + "\n")
+
+    while True:
+        which_class = input("Which class would you like to be? {} >".
+                            format(CLASSES))
+        if which_class.lower() == CLASSES[0]:
+            toon = Rogue()
+            input("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
+                  format(toon.strn, toon.dex, toon.con))
+            break
+
+        elif which_class.lower() == CLASSES[1]:
+            toon = Warrior()
+            input("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
+                  format(toon.strn, toon.dex, toon.con))
+            break
+        
+        elif which_class.lower() == CLASSES[2]:
+            toon = Cleric()
+            input("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
+                  format(toon.strn, toon.dex, toon.con))
+            break
+
+        elif which_class.lower() == CLASSES[3]:
+            toon = Wizard()
+            input("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
+                  format(toon.strn, toon.dex, toon.con))
+            break
+
+        else:
+            input(
+                "Sorry, that's not one of the choices, press return to try again.")
+
+
+
                     #####   SET INITIAL CONDITIONS  #####
 
+CLASSES = ['rogue', 'warrior', 'cleric', 'wizard']
 ## This makes the dictionary that will contain key=room_num, value=Merchant()
 merchant_dict = {}
-
-## This makes the players character and fills it will the inventory
-toon = Character()
-toon.create_character()
-
 ## This makes the first room and makes it merchant, assigns it to the merch_dict
 room = Room()
 room.make_doors()
 room.player_loc = room.doors['back'][1]
 room.merchant_loc = room.get_location()
-
 ## This makes a temp merchant to take it inventory bc I'm lazy
 invis_merchant = Merchant()
 win_list = set(invis_merchant.inventory_list)
 invis_merchant
-
 
 ## This checks for the win condition
 def win_check():
@@ -53,6 +95,38 @@ Aweessooommmee!  You collected all the different items from the merchants!!
 You win!!  There's not much more to do, but you can keep walking around!
 
 Go ahead, do a victory lap!""")
+
+## This sets up the file structure and checks if there are files in /saves
+p = path(str(path.cwd()) + "\\saves")
+if p.is_dir() == False: p.mkdir()
+directory = sorted(item for item in p.iterdir())
+
+
+
+
+
+#####  START OF GAME  #####
+cls()
+if directory == []:
+    toon = new_toon()
+    
+else:
+    info = input("You can make a [new] character, or [load] a saved one.  What would you like to do? >")
+    info.lower()
+    info.strip()
+    if info == 'new':
+        toon = new_toon()
+    if info == 'load':
+        print("\n\n")
+        for item in directory: print(item.name + "\n\n")
+        info = input("Enter a character file to load it. >")
+        info.strip()
+        for item in directory:
+            if info == item.name:
+                charinfo = Character.load_toon(item.name)
+                toon = Character(charinfo)
+            else: print("sorry that didn't work I still have to fix this")
+
 
 
 ##### MAIN WHILE LOOP #####
@@ -83,7 +157,7 @@ while True:
             print("""This is the skills page.  You can see the skill books you've aquired,
 which skills you've trained, and information on what skill you're currently training.\n""")
             
-            if toon.current_skill == None:
+            if toon.current_skill == 'nope':
                 print("You are not currently training anything")
 
             else:
