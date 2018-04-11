@@ -64,6 +64,8 @@ def new_toon():
             input(
                 "Sorry, that's not one of the choices, press return to try again.")
 
+    return toon
+
 
 
                     #####   SET INITIAL CONDITIONS  #####
@@ -97,7 +99,7 @@ You win!!  There's not much more to do, but you can keep walking around!
 Go ahead, do a victory lap!""")
 
 ## This sets up the file structure and checks if there are files in /saves
-p = path(str(path.cwd()) + "\\saves")
+p = path(str(path.cwd()) + "/saves")
 if p.is_dir() == False: p.mkdir()
 directory = sorted(item for item in p.iterdir())
 
@@ -125,7 +127,7 @@ else:
             if info == item.name:
                 charinfo = Character.load_toon(item.name)
                 toon = Character(charinfo)
-            else: print("sorry that didn't work I still have to fix this")
+            
 
 
 
@@ -145,6 +147,7 @@ while True:
     info = info.lower()
     info = info.strip()
 
+    ## IF SKILLS
     if info == 'skills':
         
         SKILLS = ['wit', 'haggle', 'jump', 'climb', 'focus']
@@ -237,6 +240,16 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current
 
                 if info == 'back': break
                     
+
+    ## IF SAVE
+    if info == 'save':
+        cls()
+        nameinfo = input("What do you want to save your character as? >")
+        nameinfo = nameinfo.lower()
+        Character.save_toon(toon.__dict__, nameinfo)
+        info = input("Ok!  Your character has been saved in a file as {}.  Enter return to continue. >".format(nameinfo))
+
+
 
     # Check that the victory condition works
     if info == 'cheat':

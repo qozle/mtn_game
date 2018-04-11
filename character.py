@@ -27,13 +27,13 @@ class Character:
 
     def load_toon(filename):
 
-        p = path(str(path.cwd()) + "\\saves")
-        directory = sorted(item for item in p.iterdir())
+        saves = path("../mtn_game/saves/")
+        directory = sorted(item for item in saves.iterdir())
         
 
         for item in directory:
             if item.name == filename:
-                p = path(item.name)
+                p = path(str(saves) + "/" + str(item.name))
 
                 raw = p.read_text()
                 kwlist = []
@@ -60,9 +60,19 @@ class Character:
 
                 return charinfo
 
-            
-                
-                
+
+    def save_toon(toon_info, filename):
+
+        p = path("../mtn_game/saves/" + str(filename))
+        f = open(p, "w+")
+        for item in toon_info:
+            f.write("+" + str(item) + "-")
+            if isinstance(toon_info[item], list):
+                for litem in toon_info[item]:
+                    f.write(str(litem) + ",")
+            else:
+                f.write(str(toon_info[item]) + ",")
+        f.close()
         
                 
 
