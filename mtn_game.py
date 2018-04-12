@@ -131,7 +131,7 @@ else:
                 if toon.current_skill == 'nope': continue
                 else:
                     toon.current_skill = Skill(float(toon.currentskill[0]), float(toon.currentskill[1]),
-                                               toon.current_skill)
+                                               toon.currentskill[2])
             
 
 
@@ -187,7 +187,7 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(int(toon.cur
                 if item.lower() == info:
                     skillname = toon.skill_books.pop(toon.skill_books.index(item))
                     skill = Skill(time(), 15, skillname)
-                    setattr(toon, 'currentskill', [time(), 15])
+                    setattr(toon, 'currentskill', [time(), 15, skillname])
                     toon.current_skill = skill
 
             if info == 'back':
