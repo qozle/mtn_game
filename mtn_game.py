@@ -128,8 +128,10 @@ else:
             if info == item.name:
                 charinfo = Character.load_toon(item.name)
                 toon = Character(charinfo)
-                toon.current_skill = Skill(toon.currentskill[0], toon.currentskill[1],
-                                           toon.current_skill)
+                if toon.current_skill == 'nope': continue
+                else:
+                    toon.current_skill = Skill(float(toon.currentskill[0]), float(toon.currentskill[1]),
+                                               toon.current_skill)
             
 
 
@@ -165,11 +167,11 @@ which skills you've trained, and information on what skill you're currently trai
             
             if toon.current_skill == 'nope':
                 print("You are not currently training anything")
-
+                
             else:
                 print("""You are currently training {}. You started training it {}. It's train time is {}.
-It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current_skill.start), toon.current_skill.train_time,
-                                 ctime(toon.current_skill.finish)))
+It will be done on {}.""".format(toon.current_skill.__name__, ctime(int(toon.current_skill.start)), toon.current_skill.train_time,
+                                 ctime(int(toon.current_skill.finish))))
 
             print("You can currently train:\n")
 

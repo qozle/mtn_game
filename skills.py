@@ -7,8 +7,9 @@ class Skill:
         self.start = start
         self.train_time = train_time
         self.finish = self.start + self.train_time
-        self.train_time = int(train_time)
+        self.train_time = train_time
         self.__name__ = name
+        
 
 
 

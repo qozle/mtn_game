@@ -19,6 +19,7 @@ class Merchant:
                                'Pick', 'Shovel', 'Leather', 'Wood', 'Flute',
                                'wit', 'haggle', 'jump', 'climb', 'focus']
         self.inventory = random.sample(self.inventory_list, 3)
+        self.inventory.append('wit')
 
         self.names_list = ['Barry bird', 'Joe', 'Billy', 'Whislter', 'Frog',
                       'George', 'Jean-paul', 'Pierre', 'Sach', 'Jessie',
