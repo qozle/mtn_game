@@ -23,13 +23,14 @@ def new_toon():
     ht = input("Great!  How tall is your character? >")
     ec = input("Cool!  What color are your characters eyes? >")
     hair = input("Nice!  What color is your character's hair? >")
-    toon = Character(name=name, ht=ht, ec=ec, hair=hair)
+    charinfo = {}
+    charinfo.update(name=name, ht=ht, ec=ec, hair=hair)
+    toon = Character()
 
     print("""
     Alright {}, you are {} feet tall, have {} eyes and {} hair.
 
-    Also, you have this in your inventory:\n""".format(toon.name, toon.ht,
-                                                       toon.ec, toon.hair))
+    Also, you have this in your inventory:\n""".format(name, ht, ec, hair))
     for item in toon.inventory:
         print(item + "\n")
 
@@ -37,25 +38,25 @@ def new_toon():
         which_class = input("Which class would you like to be? {} >".
                             format(CLASSES))
         if which_class.lower() == CLASSES[0]:
-            toon = Rogue()
+            toon = Rogue(charinfo)
             input("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
                   format(toon.strn, toon.dex, toon.con))
             break
 
         elif which_class.lower() == CLASSES[1]:
-            toon = Warrior()
+            toon = Warrior(charinfo)
             input("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
                   format(toon.strn, toon.dex, toon.con))
             break
         
         elif which_class.lower() == CLASSES[2]:
-            toon = Cleric()
+            toon = Cleric(charinfo)
             input("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
                   format(toon.strn, toon.dex, toon.con))
             break
 
         elif which_class.lower() == CLASSES[3]:
-            toon = Wizard()
+            toon = Wizard(charinfo)
             input("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
                   format(toon.strn, toon.dex, toon.con))
             break
@@ -127,6 +128,8 @@ else:
             if info == item.name:
                 charinfo = Character.load_toon(item.name)
                 toon = Character(charinfo)
+                toon.current_skill = Skill(toon.currentskill[0], toon.currentskill[1],
+                                           toon.current_skill)
             
 
 
@@ -180,8 +183,9 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(toon.current
             
             for item in toon.skill_books:
                 if item.lower() == info:
-                    skill = toon.skill_books.pop(toon.skill_books.index(item))
-                    skill = Skill(time(), 15, skill)
+                    skillname = toon.skill_books.pop(toon.skill_books.index(item))
+                    skill = Skill(time(), 15, skillname)
+                    setattr(toon, 'currentskill', [time(), 15])
                     toon.current_skill = skill
 
             if info == 'back':
