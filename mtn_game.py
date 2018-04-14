@@ -8,18 +8,21 @@ from skills import *
 from time import time, ctime
 
 
+
+SKILLBOOKS= {'Skillbook: Wit': 200, 'Skillbook: Haggle': 200, 'Skillbook: Jump': 200, 'Skillbook: Climb':200,
+             'Skillbook: Focus': 200}
+
+SKILLS = ['wit', 'haggle', 'jump', 'climb', 'focus']
+
+
 #####  FUNCTION FOR CLEARING THE SCREEN  #####
 def cls():
 
     os.system("cls" if os.name == "nt" else "clear")
 
-variable= "I'm adding a random string variable for git testing"
-
 
 #####   SET INITIAL CONDITIONS  #####
-## This makes the dictionary that will contain key=room_num, value=Merchant()
-merchant_dict = {}
-## This makes the first room and makes it merchant, assigns it to the merch_dict
+## This makes the first room and makes it merchant
 room = Room()
 room.make_doors()
 room.player_loc = room.doors['back'][1]
@@ -27,7 +30,7 @@ room.merchant_loc = room.get_location()
 ## This makes a temp merchant to take it inventory bc I'm lazy
 invis_merchant = Merchant()
 win_list = set(invis_merchant.inventory_list)
-invis_merchant
+
 
 ## Win condition check
 def win_check():
@@ -44,11 +47,10 @@ You win!!  There's not much more to do, but you can keep walking around!
 
 Go ahead, do a victory lap!""")
 
-## This sets up the file structure and checks if there are files in /saves
+## This sets up the file structure
 p = path(str(path.cwd()) + "/saves")
 if p.is_dir() == False: p.mkdir()
 directory = sorted(item for item in p.iterdir())
-
 
 
 #####  START OF GAME  #####
@@ -72,40 +74,59 @@ else:
                 toon = Character.load_toon(item.name)
                 
                 
-            
-
 ##### MAIN WHILE LOOP #####
 
 while True:
+    check_training(toon)
     cls()
     room.draw_map()
     print("\n\n")
+    print("[Save][Quit][Help][Inv][Skills]")
     print("ROOM {} ".format(room.room_idt) * 6)
 
     win_check()
     
-    info = input('\nWhat do you want to do?  [Help] for help.  You can move {}. >'.format
+    info = input('\nWhat do you want to do? You can move {}. >'.format
                  (room.avail_moves()))
     info = info.lower()
     info = info.strip()
 
-    ## IF SKILLS
     if info == 'skills':
-        toon = activate(toon)               
+        toon = skill_window(toon)               
             
-    if info == 'left' or 'right' or 'up' or 'down':
+    if info == 'left' or 'right' or 'up' or 'down':  ## This should be replaced with tkinter functionality
         room.move_player(info)
 
     if info == 'help':
         cls()
         room.help()
 
+    ## Could eventually make inventory a class
     if info == 'inv':
-        cls()
-        print("You have the following items in your inventory:" + "\n")
-        for item in toon.inventory:
-            print(item)
-        input("Press return to continue. >")
+        while True:
+            cls()
+            print("You have the following items in your inventory:" + "\n") 
+
+            for item in toon.inventory:
+                print(item + "\n")
+            print("You have the following skillbooks to read:\n\n")
+
+            for item in toon.inventory:
+                if 'Skillbook' in item:
+                    print(item + '\n')
+
+            info = input("\nEnter a skillbook to read it, or [Back]. >")
+            for item in toon.inventory:
+                try:
+                    if info == item and item in SKILLBOOKS:
+                        toon.skill_books[item] = SKILLBOOKS[item]
+                        toon.inventory.pop(toon.inventory.index(item))
+                        input("You've read {} and can now begin training it under the skills window!".format(item))
+
+                except: input("Sorry, I don't understand, enter return to try again")
+            if info == 'back':
+                break              
+            
 
     if info == 'back':
         if room.player_loc == room.doors['back'][1] and room.room_num != 0:
@@ -137,6 +158,7 @@ while True:
                     info = room.merchant.buy(toon.inventory)
                     if info == 'back': break
                     else: toon.inventory = info
+                                          
 
                 if info == 'sell':
                     info = room.merchant.sell(toon.inventory)
@@ -145,13 +167,13 @@ while True:
 
                 if info == 'back': break
                     
-
     ## IF SAVE
     if info == 'save':
         cls()
         nameinfo = input("What do you want to save your character as? >")
         nameinfo = nameinfo.lower()
         Character.save_toon(toon, nameinfo)
+        print('\n')
         info = input("Ok!  Your character has been saved in a file as {}.  Enter return to continue. >".format(nameinfo))
 
     # Check that the victory condition works

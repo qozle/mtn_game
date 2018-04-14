@@ -145,20 +145,36 @@ class Room:
             print(output, end=line_end)
 
 
-    #####  HELP SECTION  #####    
-    def help(self, *args, **kwargs):
-
-        for x, y in kwargs.items():
-            setattr(self, x, y)
-
+#####  HELP SECTION  #####    
+    def help(self):
         input("""
 Things typed in brackets ("[]") are things you can type in as commands.  They
 are not case sensetive.
 
 To move:       [Up], [Down], [Left], [Right]
+
 Inventory:     [Inv]
+
+    While in the inventory, if you have any skillbooks, you can read them, which
+    will allow you to begin training them under the skills window.  Each skill
+    has a time in seconds that it takes to train- as soon as it finishes, you'll
+    be notified, and it will be useable.  Certain skills have requisites- I.E.,
+    to train "Jump 2", you must already have completed training "Jump 1".  
+
 Skills:        [Skills]
+
+    Look at the skills you can train, and see the finish time on the skill you're
+    currently training.  This also lists information on the skills you know.
+    
+Save:          [Save]
+
+    This lets you save your current character.  This saves all your skills, including
+    the progress on any skill you're training.  You can save and load later and your
+    skill will continue to train.
+
 Quit:          [Quit]
+
+
 
 Press return to continue. >""")
 
@@ -167,5 +183,4 @@ Press return to continue. >""")
     def get_location(self):
 
         loc = random.sample(self.cells, 1)
-        return loc[0]
-        
+        return loc[0]       

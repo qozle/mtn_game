@@ -16,7 +16,7 @@ class Character:
 
         self.inventory = ['Torch', 'Book', 'Dagger']
         self.skills = [] # Skills fully trained
-        self.skill_books = [] # Skills trainable
+        self.skill_books =  # Skills trainable
         self.current_skill = 'nope' # Skill that's currently training
 
         for key, value in charinfo.items():
@@ -100,7 +100,6 @@ class Character:
                     "Sorry, that's not one of the choices, press return to try again.")
 
         return toon
-
 
 
 

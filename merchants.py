@@ -17,9 +17,10 @@ class Merchant:
         self.inventory_list = ['Torch', 'Snake', 'Chicken', 'Sponge', 'Axe',
                                'Flint and steel', 'Rope', 'Rations', 'Water',
                                'Pick', 'Shovel', 'Leather', 'Wood', 'Flute',
-                               'wit', 'haggle', 'jump', 'climb', 'focus']
+                               'Skillbook: Wit', 'Skillbook: Haggle', 'Skillbook: Jump',
+                               'Skillbook: Climb', 'Skillbook: Focus']
         self.inventory = random.sample(self.inventory_list, 3)
-        self.inventory.append('wit')
+        self.inventory.append('Skillbook: Climb')
 
         self.names_list = ['Barry bird', 'Joe', 'Billy', 'Whislter', 'Frog',
                       'George', 'Jean-paul', 'Pierre', 'Sach', 'Jessie',
@@ -39,14 +40,15 @@ class Merchant:
                           "The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. ",
                           "We're all on a sinking ship!",
                           "The planet is flat!",
-                          "The planet is round!"]
+                          "The planet is round!",
+                            "Now where did my cat go...?"]
+
         self.greeting = random.sample(self.greetings_list, 1)
 
 
     def activate(self, player_inv):
 
         cls()
-
         print('\n')
         print("Hi, my name's {}.  {}".format(self.name[0], self.greeting[0]))
         print('\n')
@@ -89,8 +91,3 @@ class Merchant:
                 return player_inv
         if info == back:
             return "back"
-        
-
-
-
-        
