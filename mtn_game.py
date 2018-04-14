@@ -16,62 +16,7 @@ def cls():
 variable= "I'm adding a random string variable for git testing"
 
 
-#####  FUNCTION FOR CREATING NEW CHARACTER  #####
-def new_toon():
-    print("Hi!  Welcome!  You don't have a character yet.  Let's make one!\n")
-    name = input("Let's make one! What's your character's name? >")
-    ht = input("Great!  How tall is your character? >")
-    ec = input("Cool!  What color are your characters eyes? >")
-    hair = input("Nice!  What color is your character's hair? >")
-    charinfo = {}
-    charinfo.update(name=name, ht=ht, ec=ec, hair=hair)
-    toon = Character()
-
-    print("""
-    Alright {}, you are {} feet tall, have {} eyes and {} hair.
-
-    Also, you have this in your inventory:\n""".format(name, ht, ec, hair))
-    for item in toon.inventory:
-        print(item + "\n")
-
-    while True:
-        which_class = input("Which class would you like to be? {} >".
-                            format(CLASSES))
-        if which_class.lower() == CLASSES[0]:
-            toon = Rogue(charinfo)
-            input("Ok, you are a Rogue!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
-                  format(toon.strn, toon.dex, toon.con))
-            break
-
-        elif which_class.lower() == CLASSES[1]:
-            toon = Warrior(charinfo)
-            input("Ok, you are a Warrior!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
-                  format(toon.strn, toon.dex, toon.con))
-            break
-        
-        elif which_class.lower() == CLASSES[2]:
-            toon = Cleric(charinfo)
-            input("Ok, you are a Cleric!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
-                  format(toon.strn, toon.dex, toon.con))
-            break
-
-        elif which_class.lower() == CLASSES[3]:
-            toon = Wizard(charinfo)
-            input("Ok, you are a Wizard!  STATS: str: {}, dex: {}, con: {}.  Press return to start game. >".
-                  format(toon.strn, toon.dex, toon.con))
-            break
-
-        else:
-            input(
-                "Sorry, that's not one of the choices, press return to try again.")
-
-    return toon
-
-
-
-                    #####   SET INITIAL CONDITIONS  #####
-
-CLASSES = ['rogue', 'warrior', 'cleric', 'wizard']
+#####   SET INITIAL CONDITIONS  #####
 ## This makes the dictionary that will contain key=room_num, value=Merchant()
 merchant_dict = {}
 ## This makes the first room and makes it merchant, assigns it to the merch_dict
@@ -84,7 +29,7 @@ invis_merchant = Merchant()
 win_list = set(invis_merchant.inventory_list)
 invis_merchant
 
-## This checks for the win condition
+## Win condition check
 def win_check():
     inv_set = set()
     for item in toon.inventory:
@@ -106,19 +51,17 @@ directory = sorted(item for item in p.iterdir())
 
 
 
-
-
 #####  START OF GAME  #####
 cls()
 if directory == []:
-    toon = new_toon()
+    toon = Character.new_toon()
     
 else:
     info = input("You can make a [new] character, or [load] a saved one.  What would you like to do? >")
     info.lower()
     info.strip()
     if info == 'new':
-        toon = new_toon()
+        toon = Character.new_toon()
     if info == 'load':
         print("\n\n")
         for item in directory: print(item.name + "\n\n")
@@ -126,20 +69,14 @@ else:
         info.strip()
         for item in directory:
             if info == item.name:
-                charinfo = Character.load_toon(item.name)
-                toon = Character(charinfo)
-                if toon.current_skill == 'nope': continue
-                else:
-                    toon.current_skill = Skill(float(toon.currentskill[0]), float(toon.currentskill[1]),
-                                               toon.currentskill[2])
+                toon = Character.load_toon(item.name)
+                
+                
             
-
-
 
 ##### MAIN WHILE LOOP #####
 
 while True:
-
     cls()
     room.draw_map()
     print("\n\n")
@@ -154,45 +91,7 @@ while True:
 
     ## IF SKILLS
     if info == 'skills':
-        
-        SKILLS = ['wit', 'haggle', 'jump', 'climb', 'focus']
-        for item in toon.inventory:
-            if item.lower() in SKILLS:
-                toon.skill_books.append(toon.inventory.pop(toon.inventory.index(item)))
-        
-        while True:
-            cls()
-            print("""This is the skills page.  You can see the skill books you've aquired,
-which skills you've trained, and information on what skill you're currently training.\n""")
-            
-            if toon.current_skill == 'nope':
-                print("You are not currently training anything")
-                
-            else:
-                print("""You are currently training {}. You started training it {}. It's train time is {}.
-It will be done on {}.""".format(toon.current_skill.__name__, ctime(int(toon.current_skill.start)), toon.current_skill.train_time,
-                                 ctime(int(toon.current_skill.finish))))
-
-            print("You can currently train:\n")
-
-            for item in toon.skill_books:
-                print("-" + str(item) + "\n")
-
-            info = input("""Enter a skill book to begin training it, or [Back]. >""")
-            info = info.lower()
-            info = info.strip()
-
-            
-            for item in toon.skill_books:
-                if item.lower() == info:
-                    skillname = toon.skill_books.pop(toon.skill_books.index(item))
-                    skill = Skill(time(), 15, skillname)
-                    setattr(toon, 'currentskill', [time(), 15, skillname])
-                    toon.current_skill = skill
-
-            if info == 'back':
-                info = 'none'
-                break       
+        toon = activate(toon)               
             
     if info == 'left' or 'right' or 'up' or 'down':
         room.move_player(info)
@@ -252,10 +151,8 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(int(toon.cur
         cls()
         nameinfo = input("What do you want to save your character as? >")
         nameinfo = nameinfo.lower()
-        Character.save_toon(toon.__dict__, nameinfo)
+        Character.save_toon(toon, nameinfo)
         info = input("Ok!  Your character has been saved in a file as {}.  Enter return to continue. >".format(nameinfo))
-
-
 
     # Check that the victory condition works
     if info == 'cheat':
@@ -264,6 +161,3 @@ It will be done on {}.""".format(toon.current_skill.__name__, ctime(int(toon.cur
     ## TIME TO GTFO oops caps
     if info == 'quit':
         break
-
-
-    
